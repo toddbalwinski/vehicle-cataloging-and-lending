@@ -1,4 +1,4 @@
-# Cataloging and Lending Application (CLA)
+# Vehicle Cataloging and Lending Application
 
 ## Project Overview
 This project was developed as part of CS 3240 Software Engineering at the University of Virginia. The primary goal was to learn practical software development skills through the creation of a Cataloging and Lending Application (CLA). Working collaboratively in groups of five, each member undertook specialized roles to effectively deliver a fully functional web application.
