@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Collection</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'vehicles/manage_collections.css' %}" />
+  </head>
+  <body>
+    <header>
+      <h1>Edit Collection</h1>
+    </header>
+
+    <main>
+      <section class="edit-collection">
+        <h2>Update Collection Details</h2>
+        
+        <form method="POST" action="{% url 'vehicles:edit_collection' collection.id %}">
+          {% csrf_token %}
+          
+          <div class="form-group">
+            <label for="name">Collection Name:</label>
+            <input 
+              type="text" 
+              name="name" 
+              id="name" 
+              value="{{ collection.name }}" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" required>{{ collection.description }}</textarea>
+          </div>
+
+          {% if user_type == 'librarian' %}
+          <div class="form-group">
+            <label for="is_private">Private Collection:</label>
+            <input 
+              type="checkbox" 
+              name="is_private" 
+              id="is_private" 
+              {% if collection.is_private %}checked{% endif %}
+            />
+          </div>
+          {% endif %}
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-update">Update Collection</button>
+          </div>
+        </form>
+
+        <section class="back-link">
+          <a href="{% url 'vehicles:manage_collections' %}">Back to Collections</a>
+          <br>
+          <a href="{% url 'vehicles:home' %}">Back to Home Page</a>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

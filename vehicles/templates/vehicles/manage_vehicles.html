@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Vehicles</title>
+
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'vehicles/manage_collections.css' %}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Manage Vehicles</h1>
+    </header>
+
+    <main>
+      <section class="add-vehicle">
+        <a href="{% url 'vehicles:add_vehicle' %}" class="btn btn-add">Post a New Vehicle</a>
+      </section>
+      <h2>Vehicles</h2>
+      <section class="collections-list">
+        <ul>
+          {% for vehicle in vehicles %}
+          <li>
+            <div class="collection-item">
+              <h3>{{ vehicle.name }}</h3>
+              <p>{{ vehicle.description }}</p>
+              {% if vehicle.image %}
+                <img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}">
+              {% else %}
+                <p>No image available.</p>
+              {% endif %}
+                {% if vehicle.available %}
+                  <p class="available">Available for Lending</p>
+                {% else %}
+                  <p class="not-available">Not Available for Lending</p>
+                {% endif %}
+                <p>Posted by: {{ vehicle.owner }}</p>
+                <p>Associated Collections: </p>
+                {% if vehicle.collections.all %}
+                <ul>
+                  {% for collection in vehicle.collections.all %}
+                  <li>{{ collection.name }}</li>
+                  {% endfor %}
+                </ul>
+                {% else %}
+                <p>None</p>
+                {% endif %}
+              <a
+                href="{% url 'vehicles:edit_vehicle' vehicle.id %}"
+                class="btn btn-edit"
+                >Edit</a
+              >
+              <form
+                action="{% url 'vehicles:delete_vehicle' vehicle.id %}"
+                method="POST"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="btn btn-delete"
+                  onclick="return confirm('Are you sure you want to delete this vehicle?')"
+                >
+                  Delete
+                </button>
+              </form>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      <section class="back-link">
+        <a href="{% url 'vehicles:home' %}">Back to Home Page</a>
+      </section>
+    </main>
+  </body>
+</html>

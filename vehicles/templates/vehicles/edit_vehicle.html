@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Vehicle</title>
+
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'vehicles/manage_collections.css' %}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Edit Vehicle</h1>
+    </header>
+
+    <main>
+      <section class="edit-collection">
+        <h2>Update Vehicle Details</h2>
+
+        <form
+          method="POST"
+          action="{% url 'vehicles:edit_vehicle' vehicle.id %}"
+        >
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="name">Vehicle Name:</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value="{{ vehicle.name }}"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" required>
+{{ vehicle.description }}</textarea
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="image">Image:</label>
+            {% if vehicle.image %}
+            <img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}" />
+            {% else %}
+            <p>No image available.</p>
+            {% endif %}
+            <input type="file" name="image" id="image" />
+          </div>
+
+          <div class="form-group">
+            <label for="available">Available for Lending:</label>
+            <input
+              type="checkbox"
+              name="available"
+              id="available"
+              {%
+              if
+              vehicle.available
+              %}checked{%
+              endif
+              %}
+            />
+          </div>
+
+          <!-- Collections Section -->
+          <div class="form-group">
+            <label for="collections">Select Collections:</label>
+            <select name="collections" id="collections" multiple>
+              {% for collection in collections %}
+              <option
+                value="{{ collection.id }}"
+                {%
+                if
+                collection
+                in
+                vehicle.collections.all
+                %}selected{%
+                endif
+                %}
+              >
+                {{ collection.name }} {% if collection.is_private %} (Private)
+                {% else %} (Public) {% endif %}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-update">Update Vehicle</button>
+          </div>
+        </form>
+
+        <section class="back-link">
+          <a href="{% url 'vehicles:manage_vehicles' %}">Back to Vehicles</a>
+          <br />
+          <a href="{% url 'vehicles:home' %}">Back to Home Page</a>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

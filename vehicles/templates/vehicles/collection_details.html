@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ collection.name }}</title>
+
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'vehicles/collection_detail.css' %}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>{{ collection.name }}</h1>
+    </header>
+
+    <main>
+      <section class="collection-details">
+        <h3>{{ collection.description }}</h3>
+      </section>
+
+      <section class="collections-list">
+        <ul>
+          {% for vehicle in vehicles %}
+          <li>
+            <div class="collection-item">
+              <h3>{{ vehicle.name }}</h3>
+              <p>{{ vehicle.description }}</p>
+              {% if vehicle.image %}
+              <img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}" />
+              {% else %}
+              <p>No image available.</p>
+              {% endif %} {% if vehicle.available %}
+              <form
+                method="POST"
+                action="{% url 'vehicles:borrow_vehicle' vehicle.id %}"
+              >
+                {% csrf_token %}
+                <button type="submit">Borrow Vehicle</button>
+              </form>
+              {% else %}
+              <p class="not-available">Not Available for Lending</p>
+              {% endif %}
+              <p>
+                <a href="{% url 'vehicles:vehicle_detail' vehicle.id %}">View Details</a>
+              </p>
+              <p class="owner">Posted by: {{ vehicle.owner }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="back-link">
+        <a href="{% url 'vehicles:home' %}">Back to Home Page</a>
+      </section>
+    </main>
+  </body>
+</html>

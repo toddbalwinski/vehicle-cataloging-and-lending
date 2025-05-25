@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Librarians</title>
+
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'vehicles/manage_collections.css' %}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Manage Librarians</h1>
+    </header>
+
+    <main>
+      <h2>Patrons</h2>
+      <section class="collections-list">
+        <ul>
+          {% for patron in patrons %}
+          <li>
+            <h3> {{ patron.username }} </h3>
+            <form method="POST" action="{% url 'vehicles:promote_to_librarian' patron.id %}">
+                {% csrf_token %}
+                <button type="submit">Promote to Librarian</button>
+              </form>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      <section class="back-link">
+        <a href="{% url 'vehicles:home' %}">Back to Home Page</a>
+      </section>
+    </main>
+  </body>
+</html>

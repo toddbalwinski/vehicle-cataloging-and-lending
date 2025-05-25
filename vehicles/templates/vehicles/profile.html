@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .profile-container {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+      }
+      .profile-section {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+      .profile-section:last-child {
+        border-bottom: none;
+      }
+      .profile-picture img {
+        display: block;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+      }
+      h1, h2 {
+        text-align: center;
+        color: #333;
+      }
+      p {
+        text-align: center;
+        color: #666;
+      }
+      form {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      a {
+        display: inline-block;
+        margin-top: 20px;
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .messages {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+      }
+      .messages li {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <h1>Welcome, {{ user.username }}</h1>
+      
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <div class="profile-section">
+        <h2>Profile Picture</h2>
+        <div class="profile-picture">
+          {% if user.userprofile.profile_picture %}
+            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" style="max-width: 150px; max-height: 150px" />
+          {% else %}
+            <img src="https://vehicleappsbucket.s3.amazonaws.com/media/profile_pictures/default_profile.png" />
+          {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ profile_form.as_p }}
+          <button type="submit" name="profile_picture_submit">Update Profile Picture</button>
+        </form>
+      </div>
+
+      <div class="profile-section">
+        <h2>Account Information</h2>
+        <form method="post">
+          {% csrf_token %}
+          {{ user_form.as_p }}
+          <button type="submit" name="user_info_submit">Update Account Information</button>
+        </form>
+      </div>
+
+      <div class="profile-section">
+        <h2>Change Password</h2>
+        <form method="post">
+          {% csrf_token %}
+          {{ password_form.as_p }}
+          <button type="submit" name="password_change_submit">Change Password</button>
+        </form>
+      </div>
+
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'vehicles:home' %}">Home</a> | 
+        <a href="/logout/">Logout</a>
+      </div>
+    </div>
+  </body>
+</html>

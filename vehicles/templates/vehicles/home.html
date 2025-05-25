@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page - Vehicle Lending</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'vehicles/style.css' %}" />
+    <!-- <link rel="stylesheet" href="{% static 'vehicles/css/style.css' %}"> -->
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      {% if user_type == 'librarian' %}
+      <h1>Welcome Librarian {{ user.username }} to Vehicle Lending!</h1>
+      <p>Application for lending and borrowing vehicles!</p>
+      {% elif user_type == 'patron' %}
+      <h1>Welcome Patron {{ user.username }} to Vehicle Lending!</h1>
+      {% else %}
+      <h1>Welcome Guest to Vehicle Lending!</h1>
+      {% endif %}
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-left">
+        <a href="{% url 'vehicles:home' %}">Home</a>
+        {% if user_type == 'librarian' %}
+        <a href="{% url 'vehicles:manage_librarians' %}">Manage Librarians</a>
+        <a href="{% url 'vehicles:manage_vehicles' %}">Manage Vehicles</a>
+        <a href="{% url 'vehicles:manage_requests' %}">Manage Requests</a>
+        {% endif %}
+        {% if user_type != 'guest' %}
+        <a href="{% url 'vehicles:manage_collections' %}">Manage Collections</a>
+        <a href="{% url 'vehicles:logout' %}">Logout</a>
+        {% endif %}
+        {% if user_type == 'guest' %}
+        <a href="{% url 'vehicles:login' %}">Login</a>
+        {% endif %}
+      </div>
+
+      {% if user_type != 'guest' %}
+      <div class="profile-container">
+        <a href="{% url 'vehicles:profile' %}">
+          {% if user.userprofile.profile_picture %}
+          <img
+            src="{{ user.userprofile.profile_picture.url }}"
+            alt="Profile Picture"
+            class="profile-image"
+          />
+          {% else %}
+          <img
+            src="https://vehicleappsbucket.s3.amazonaws.com/media/profile_pictures/default_profile.png"            alt="Profile Picture"
+            class="profile-image"
+          />
+          {% endif %}
+        </a>
+      </div>
+      {% endif %}
+    </nav>
+
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <form method="get" action="{% url 'vehicles:home' %}">
+        {{ search_form.query }}
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <section class="collections-list">
+        <h2>Available Collections</h2>
+        <div class="collections-container">
+          {% for collection in collections %}
+          <div class="collection-card">
+            <h3>{{ collection.name }}</h3>
+            <p>{{ collection.description }}</p>
+            <a
+              href="{% url 'vehicles:collection_details' collection.id %}"
+              class="btn btn-edit"
+              >View Details</a
+            >
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% if private_collections %}
+      <section class="collections-list">
+        <h2>Private Collections</h2>
+        <ul>
+          {% for private_collection in private_collections %}
+          <li>
+            <div class="collection-item">
+              <h3>{{ private_collection.name }}</h3>
+              {% if private_collection.id in user_requests %}
+              <button disabled>Already Requested</button>
+              {% else %}
+              <form
+                method="POST"
+                action="{% url 'vehicles:create_request' private_collection.id %}"
+              >
+                {% csrf_token %}
+                <button type="submit">Request Access</button>
+              </form>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+      <h2>Available Vehicles</h2>
+
+      <div class="vehicle-list">
+        {% for vehicle in vehicles %}
+        <div class="vehicle-item">
+          <h3>{{ vehicle.name }}</h3>
+            <p>{{ vehicle.description }}</p>
+            {% if vehicle.image %}
+            <img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}" />
+            {% else %}
+            <p>No image available.</p>
+            {% endif %} {% if vehicle.available %}
+            <form
+                method="POST"
+                action="{% url 'vehicles:borrow_vehicle' vehicle.id %}"
+              >
+                {% csrf_token %}
+                <button type="submit">Borrow Vehicle</button>
+              </form>
+
+            {% else %}
+            <p class="not-available">Not Available for Lending</p>
+            {% endif %}
+            <p>
+              <a href="{% url 'vehicles:vehicle_detail' vehicle.id %}">View Details</a>
+            </p>
+            <p class="owner">Posted by: {{ vehicle.owner }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <!-- Footer -->
+    <footer>
+      <p>&copy; Cataloging and Lending application for vehicles</p>
+      {% if is_guest %}
+      <div class="guest-notice">
+        <p>
+          You're browsing as a guest.
+          <a href="{% url 'vehicles:login' %}">Log in</a> for full access.
+        </p>
+      </div>
+      {% endif %}
+    </footer>
+  </body>
+</html>

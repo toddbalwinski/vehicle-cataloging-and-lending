@@ -1,0 +1,114 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #007bff;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  font-weight: normal;
+}
+
+main {
+  width: 85%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.collection-details h3 {
+  font-size: 1.5em;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.collections-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.collections-list li {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 20px;
+}
+
+.collection-item {
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.collection-item h3 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+}
+
+.collection-item p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.collection-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.collection-item .available {
+  color: #2c9f45;
+  font-weight: bold;
+}
+
+.collection-item .not-available {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.collection-item .owner {
+  color: #555;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.back-link {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.back-link a {
+  display: inline-block;
+  text-align: center;
+  background-color: #2196f3;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.1em;
+  margin-top: 30px;
+}
+.back-link a:hover {
+  background-color: #ddd;
+}

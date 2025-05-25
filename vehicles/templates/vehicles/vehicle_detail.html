@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vehicle Detail</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'vehicles/vehicle_detail.css' %}" />
+  </head>
+  <body>
+    <header>
+      <h1>Vehicle Detail</h1>
+    </header>
+    <div class="container">
+      <div class="vehicle-details">
+        <p><strong>Vehicle ID:</strong> {{ vehicle.id }}</p>
+        <p><strong>Owner:</strong> {{ vehicle.owner }}</p>
+        <p><strong>Name:</strong> {{ vehicle.name }}</p>
+        <p><strong>Description:</strong> {{ vehicle.description }}</p>
+
+        <h2>Images</h2>
+        <div class="images-container">
+          {% if vehicle.image %}
+            <img src="{{ vehicle.image.url }}" alt="Vehicle Image" />
+          {% else %}
+            <p>No image available for this vehicle.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <section class="reviews-section">
+        <h2>Reviews</h2>
+        {% if reviews %}
+        <ul>
+          {% for review in reviews %}
+          <li>
+            <strong
+              >{{ review.user.username }} ({{ review.rating }} stars):</strong
+            >
+            <p>{{ review.comment }}</p>
+            <small
+              >Reviewed on: {{ review.created_at|date:"F j, Y, g:i a" }}</small
+            >
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No reviews yet. Be the first to review this vehicle!</p>
+        {% endif %} {% if user.is_authenticated %}
+        <h3>Leave a Review</h3>
+        <form method="post">
+          {% csrf_token %} {{ form.as_p }}
+          <button type="submit">Submit Review</button>
+        </form>
+        {% else %}
+        <p>You must be logged in to leave a review.</p>
+        {% endif %}
+      </section>
+
+      <section class="back-link">
+        <a href="{% url 'vehicles:home' %}">Back to Home Page</a>
+      </section>
+    </div>
+  </body>
+</html>

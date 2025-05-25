@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Collections</title>
+
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'vehicles/manage_collections.css' %}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Manage Your Collections</h1>
+    </header>
+
+    <main>
+      <!-- Display private collection requests -->
+      <section class="collection-requests">
+        <h2>Borrow Requests</h2>
+        <ul>
+          {% for request in vehicle_requests %}
+          <li>
+            <div class="request-item">
+              <p>{{ request }}</p>
+            </div>
+            <form
+                action="{% url 'vehicles:approve_borrow' request.id %}"
+                method="POST"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-approve">Approve</button>
+              </form>
+              <form
+                action="{% url 'vehicles:reject_borrow' request.id %}"
+                method="POST"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-reject">Reject</button>
+              </form>
+        </li>
+        {% endfor %}
+        </ul>
+    </section>
+
+
+      <section class="back-link">
+        <a href="{% url 'vehicles:home' %}">Back to Home Page</a>
+      </section>
+    </main>
+  </body>
+</html>
