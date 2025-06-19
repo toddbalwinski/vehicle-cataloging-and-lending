@@ -18,11 +18,11 @@ This project was developed as part of CS 3240 Software Engineering at the Univer
 ---
 
 ## Authors
-- [Todd Balwinski] (Requirements Manager)
-- Team Member 2
-- Team Member 3
-- Team Member 4
-- Team Member 5
+- Todd Balwinski (Requirements Manager)
+- Andy Liang (Srum Master)
+- Krish Patel (DevOps Manager)
+- Derick Lee (Software Architecht)
+- Kevin Arleen (Testing Manager)
 
 ---
 
